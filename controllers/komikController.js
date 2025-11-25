@@ -1,5 +1,6 @@
 const db = require('../models');
 const komikService = require('./../services/komikService');
+const { ValidationError } = komikService;
 
 async function createKomik(req, res) {
     try {
@@ -14,7 +15,11 @@ async function createKomik(req, res) {
         const result = await komikService.createKomik(db, komikData);
         res.status(201).json({ success: true, data: result });
     } catch (error) {
-        res.status(400).json({ success: false, error: error.message });
+        if (error instanceof ValidationError) {
+            res.status(400).json({ success: false, errors: error.errors });
+        } else {
+            res.status(400).json({ success: false, error: error.message });
+        }
     }
 }
 
@@ -56,7 +61,11 @@ async function updateKomik(req, res) {
         const result = await komikService.updateKomik(db, req.params.id, komikData);
         res.json({ success: true, data: result });
     } catch (error) {
-        res.status(400).json({ success: false, error: error.message });
+        if (error instanceof ValidationError) {
+            res.status(400).json({ success: false, errors: error.errors });
+        } else {
+            res.status(400).json({ success: false, error: error.message });
+        }
     }
 }
 
