@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: flase}))
+app.use(express.urlencoded({ extended: false}))
 
 async function startServer() {
     await connectDatabase();
